@@ -1,0 +1,22 @@
+//for the total count of the seperate count
+temp=births.pivot_table('births', columns='gender',aggfunc='sum')
+pd.pivot_table(births, index='year', columns='gender', values='births', aggfunc='sum').plot()
+print(temp)
+plt.ylabel('Total births per year')
+
+//for the total count for a day in the week
+births = births.dropna()
+births['day'] = births['day'].astype(int)
+births['month'] = births['month'].astype(int)
+births['year'] = births['year'].astype(int)
+
+births['date'] = pd.to_datetime(births[['year', 'month', 'day']], errors='coerce')
+
+births.index = births['date']
+births['dayofweek'] = births.index.dayofweek
+births['decade'] = (births['year'] // 10) * 10
+
+births.pivot_table('births', index='dayofweek', columns='gender', aggfunc='mean').plot()
+plt.xticks(ticks=range(7), labels=['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+plt.ylabel('Average Births')
+plt.title('Average Births by Day of Week and Gender')
